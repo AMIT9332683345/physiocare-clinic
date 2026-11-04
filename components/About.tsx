@@ -1,5 +1,5 @@
 import type { TeamMember } from "@/lib/content";
-import { siteConfig } from "@/lib/site-config";
+import { getSettings } from "@/lib/settings";
 import { CheckIcon } from "./icons";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
@@ -11,7 +11,8 @@ const promises = [
   "No machine-only sessions; hands-on plus exercise",
 ];
 
-export default function About({ team }: { team: TeamMember[] }) {
+export default async function About({ team }: { team: TeamMember[] }) {
+  const settings = await getSettings();
   return (
     <section id="about" className="bg-pearl py-20 lg:py-28">
       <div className="container-x grid gap-14 lg:grid-cols-[1fr_1.05fr]">
@@ -19,16 +20,19 @@ export default function About({ team }: { team: TeamMember[] }) {
           <SectionHead
             eyebrow="About the clinic"
             title={<>Physiotherapy that explains itself</>}
-            intro={`Founded by ${siteConfig.ownerName} (${siteConfig.credentials}), ${siteConfig.clinicName} was built around one frustration patients kept reporting: being hooked up to machines for 40 minutes and sent home with no idea what changed.`}
+            intro={`Founded by ${settings.ownerName} (${settings.credentials}), ${settings.clinicName} was built around one frustration patients kept reporting: being hooked up to machines for 40 minutes and sent home with no idea what changed.`}
           />
 
           <Reveal delay={100}>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-teal-800/75">
-              We run the opposite way. You get a full movement and strength assessment, a clear
-              diagnosis in plain language, treatment that is mostly hands-on plus active exercise, and
-              numbers you can compare month over month. If your problem needs imaging or a surgeon's
-              opinion first, we will say that in the first session instead of selling you twelve visits.
-            </p>
+            {settings.bio
+              .split(/\n\s*\n/)
+              .map((para) => para.trim())
+              .filter(Boolean)
+              .map((para, i) => (
+                <p key={i} className="mt-5 max-w-xl text-base leading-relaxed text-teal-800/75">
+                  {para}
+                </p>
+              ))}
           </Reveal>
 
           <Reveal delay={160}>

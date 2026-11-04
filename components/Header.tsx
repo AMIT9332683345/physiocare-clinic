@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { siteConfig, telUrl, whatsappUrl } from "@/lib/site-config";
+import { telFor, waFor } from "@/lib/contact-links";
+import { monogram } from "@/lib/site-config";
+import type { Settings } from "@/lib/settings";
 import { CloseIcon, MenuIcon, PhoneIcon, WhatsAppIcon } from "./icons";
 
 const links = [
@@ -13,7 +15,7 @@ const links = [
   { href: "#contact", label: "Contact" },
 ];
 
-export default function Header() {
+export default function Header({ settings }: { settings: Settings }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -35,10 +37,10 @@ export default function Header() {
       <div className="container-x flex h-20 items-center justify-between gap-4">
         <a href="#top" className="flex items-center gap-3 text-pearl">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-lime font-display text-lg font-extrabold text-teal-800">
-            PC
+            {monogram(settings.clinicName)}
           </span>
           <span className="leading-tight">
-            <span className="block font-display text-lg font-bold">{siteConfig.clinicName}</span>
+            <span className="block font-display text-lg font-bold">{settings.clinicName}</span>
             <span className="block text-[11px] uppercase tracking-[0.18em] text-teal-300">
               Physiotherapy &amp; Rehab
             </span>
@@ -59,15 +61,15 @@ export default function Header() {
 
         <div className="hidden items-center gap-3 md:flex">
           <a
-            href={telUrl()}
+            href={telFor(settings)}
             className="btn-ghost text-pearl hover:bg-teal-700"
-            aria-label={`Call ${siteConfig.clinicName}`}
+            aria-label={`Call ${settings.clinicName}`}
           >
             <PhoneIcon className="h-5 w-5" />
-            <span className="text-sm">{siteConfig.phoneNumber}</span>
+            <span className="text-sm">{settings.phoneNumber}</span>
           </a>
           <a
-            href={whatsappUrl()}
+            href={waFor(settings)}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-lime text-sm"
@@ -102,11 +104,11 @@ export default function Header() {
               </a>
             ))}
             <div className="mt-3 grid grid-cols-2 gap-3">
-              <a href={telUrl()} className="btn-ghost text-pearl">
+              <a href={telFor(settings)} className="btn-ghost text-pearl">
                 <PhoneIcon className="h-5 w-5" /> Call
               </a>
               <a
-                href={whatsappUrl()}
+                href={waFor(settings)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-lime"

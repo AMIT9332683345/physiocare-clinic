@@ -1,8 +1,11 @@
 /**
  * ============================================================
- *  ONE FILE TO EDIT — clinic name, phone, WhatsApp, colours.
- *  Change the values below, rebuild/deploy, and the whole
- *  website updates. Nothing else needs touching.
+ *  DEFAULT BRAND VALUES.
+ *  These are the fallbacks. Once the database is seeded, the live
+ *  values come from the `settings` collection and can be changed
+ *  without a redeploy at http://yoursite/admin — clinic name,
+ *  phone, WhatsApp, address, bio, hours and share image.
+ *  Edit here only if you prefer code over the admin panel.
  * ============================================================
  */
 
@@ -13,6 +16,12 @@ export const siteConfig = {
   tagline: "Move better. Live pain-free.",
   ownerName: "Dr. Amit Kumar",
   credentials: "PT, MPT (Orthopaedics) — 12+ yrs",
+
+  /** "About the physio" paragraph — shown on the site, editable in /admin. */
+  bio: `Twelve years treating spines, shoulders, knees and post-surgical repairs, and the thing
+patients remember is not the machine they were hooked to — it is being told plainly what is wrong and
+what will fix it. That clinic runs that way on purpose: assess properly, treat with hands and
+exercise, then show you the numbers that prove it worked.`,
 
   // ---------- CONTACT (demo numbers — replace with yours) ----------
   // Use full international format, digits only, no "+" and no spaces.
@@ -33,6 +42,13 @@ export const siteConfig = {
   instagram: "",
   facebook: "",
 
+  // ---------- SHARING ----------
+  // Public URL of the deployed site (set SITE_URL as a deploy env var too).
+  siteUrl: "",
+  /** Image shown when the link is shared. Leave "" to auto-generate a branded one. */
+  ogImage: "",
+  shareTagline: "One-to-one physiotherapy. Book by WhatsApp in 30 seconds.",
+
   // ---------- COLOURS ----------
   colors: {
     midnightTeal: "#0B3048", // deep midnight teal
@@ -47,18 +63,13 @@ export const siteConfig = {
 
 export type SiteConfig = typeof siteConfig;
 
-/** Digits-only number for wa.me links. */
-export function waDigits(): string {
-  return siteConfig.whatsappNumber.replace(/\D/g, "");
-}
-
-/** https://wa.me/<number>?text=<prefilled message> */
-export function whatsappUrl(message?: string): string {
-  const text = encodeURIComponent(message ?? siteConfig.whatsappGreeting);
-  return `https://wa.me/${waDigits()}?text=${text}`;
-}
-
-/** tel: link built from phoneDial. */
-export function telUrl(): string {
-  return `tel:${siteConfig.phoneDial.replace(/[^\d+]/g, "")}`;
+/** Two-letter logo monogram derived from the clinic name. */
+export function monogram(name: string): string {
+  const letters = name
+    .split(/[\s&-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? "")
+    .join("");
+  return letters || "PC";
 }

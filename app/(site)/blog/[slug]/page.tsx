@@ -4,9 +4,11 @@ import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import { ArrowRightIcon, ClockIcon, WhatsAppIcon } from "@/components/icons";
 import { loadContent } from "@/lib/content";
-import { siteConfig, whatsappUrl } from "@/lib/site-config";
+import { waFor } from "@/lib/contact-links";
+import { getSettings } from "@/lib/settings";
 
-export const revalidate = 300;
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 async function find(slug: string) {
   const { articles } = await loadContent();
@@ -21,11 +23,30 @@ export async function generateMetadata({
   const { slug } = await params;
   const { article } = await find(slug);
   if (!article) return { title: "Article not found" };
+  const settings = await getSettings();
+  const url = `/blog/${article.slug}`;
+  const custom = settings.ogImage
+    ? { images: [{ url: settings.ogImage, width: 1200, height: 630, alt: article.title }] }
+    : {};
   return {
     title: article.title,
     description: article.excerpt,
-    keywords: [article.category, "physiotherapy", siteConfig.clinicName],
-    openGraph: { title: article.title, description: article.excerpt, type: "article" },
+    keywords: [article.category, "physiotherapy", settings.clinicName],
+    alternates: { canonical: url },
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      url,
+      type: "article",
+      siteName: settings.clinicName,
+      ...custom,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt,
+      ...(settings.ogImage ? { images: [settings.ogImage] } : {}),
+    },
   };
 }
 
@@ -35,7 +56,7 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { article, others } = await find(slug);
+  const [{ article, others }, settings] = await Promise.all([find(slug), getSettings()]);
   if (!article) notFound();
 
   return (
@@ -56,7 +77,7 @@ export default async function ArticlePage({
               <ClockIcon className="h-4 w-4" /> {article.readTime}
             </span>
             <span>Published {article.date}</span>
-            <span>{siteConfig.clinicName}</span>
+            <span>{settings.clinicName}</span>
           </p>
         </div>
       </header>
@@ -81,11 +102,12 @@ export default async function ArticlePage({
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-pearl/70">
                 Articles narrow things down; an assessment settles them. Book a 45–60 minute slot
-                with a senior physiotherapist at {siteConfig.clinicName}.
+                with a senior physiotherapist at {settings.clinicName}.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
-                  href={whatsappUrl(
+                  href={waFor(
+                    settings,
                     `Hi, I read "${article.title}" on your website and I would like an assessment.`
                   )}
                   target="_blank"

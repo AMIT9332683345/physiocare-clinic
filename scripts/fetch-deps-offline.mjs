@@ -13,7 +13,9 @@ import { execFileSync } from "node:child_process";
 
 const STAGE = join(tmpdir(), "qoder-npm-stage");
 const ATTEMPTS = Number(process.env.FETCH_ATTEMPTS || 15);
-const root = process.cwd();
+// ROOT lets the same script install a tool package elsewhere, e.g. a global
+// tools folder, without touching this app's node_modules.
+const root = process.env.ROOT_DIR || process.cwd();
 const modules = join(root, "node_modules");
 
 // Git Bash's tar reads "C:\..." as a remote host, so prefer Windows' own tar.

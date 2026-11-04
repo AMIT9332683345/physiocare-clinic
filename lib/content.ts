@@ -4,27 +4,29 @@
  * IP allowlist not updated yet) the bundled demo data is used instead, so the
  * website never renders an empty page.
  */
-import demo, { collections } from "@/data/demo-content.mjs";
+import demo from "@/data/demo-content.mjs";
+import { COLL } from "./collections";
 import { readCollection } from "./mongo";
 
 type Row = Record<string, unknown>;
 
-const cleanRows = <T extends Row>(rows: T[]): Omit<T, "_id">[] =>
-  rows.map(({ _id, ...rest }) => rest as Omit<T, "_id">);
+/** MongoDB's `_id` is renamed to `id` so it survives as a plain string. */
+const withIds = <T extends Row>(rows: T[]) =>
+  rows.map(({ _id, ...rest }) => ({ ...rest, id: String(_id ?? "") }) as T & { id: string });
 
 async function pick<T extends Row>(collection: string, fallback: T[], sort?: Record<string, 1 | -1>) {
   const rows = await readCollection<T>(collection, {}, sort);
-  return rows && rows.length ? cleanRows(rows) : fallback;
+  return rows && rows.length ? withIds(rows) : fallback.map((row) => ({ ...row, id: "" }));
 }
 
 export async function loadContent() {
   const [services, packages, team, testimonials, faqs, articles] = await Promise.all([
-    pick(collections.services, demo.services, { order: 1 }),
-    pick(collections.packages, demo.packages, { order: 1 }),
-    pick(collections.team, demo.team, { order: 1 }),
-    pick(collections.testimonials, demo.testimonials, { order: 1 }),
-    pick(collections.faqs, demo.faqs, { order: 1 }),
-    pick(collections.articles, demo.articles, { date: -1 }),
+    pick(COLL.services, demo.services, { order: 1 }),
+    pick(COLL.packages, demo.packages, { order: 1 }),
+    pick(COLL.team, demo.team, { order: 1 }),
+    pick(COLL.testimonials, demo.testimonials, { order: 1 }),
+    pick(COLL.faqs, demo.faqs, { order: 1 }),
+    pick(COLL.articles, demo.articles, { date: -1 }),
   ]);
 
   return {
@@ -52,6 +54,7 @@ const list = (v: unknown) => (Array.isArray(v) ? v.map(String) : []);
 
 function asService(d: Row) {
   return {
+    id: s(d.id),
     slug: s(d.slug),
     icon: s(d.icon, "spine"),
     title: s(d.title),
@@ -66,6 +69,7 @@ function asPackage(d: Row) {
   const price = n(d.price);
   const sessions = Math.max(1, n(d.sessions, 1));
   return {
+    id: s(d.id),
     name: s(d.name),
     price,
     sessions,
@@ -78,6 +82,7 @@ function asPackage(d: Row) {
 
 function asTeam(d: Row) {
   return {
+    id: s(d.id),
     name: s(d.name),
     role: s(d.role),
     qualification: s(d.qualification),
@@ -89,6 +94,7 @@ function asTeam(d: Row) {
 
 function asTestimonial(d: Row) {
   return {
+    id: s(d.id),
     name: s(d.name),
     city: s(d.city),
     condition: s(d.condition),
@@ -98,11 +104,12 @@ function asTestimonial(d: Row) {
 }
 
 function asFaq(d: Row) {
-  return { q: s(d.q), a: s(d.a) };
+  return { id: s(d.id), q: s(d.q), a: s(d.a) };
 }
 
 function asArticle(d: Row) {
   return {
+    id: s(d.id),
     slug: s(d.slug),
     title: s(d.title),
     category: s(d.category),

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { siteConfig, telUrl, whatsappUrl } from "@/lib/site-config";
+import { telFor, waFor } from "@/lib/contact-links";
+import type { Settings } from "@/lib/settings";
 import { ClockIcon, MapPinIcon, MailIcon, PhoneIcon, WhatsAppIcon } from "./icons";
 
 type Mode = "appointment" | "message";
@@ -11,9 +12,11 @@ const field =
 const label = "mb-1.5 block text-xs font-bold uppercase tracking-wider text-teal-700";
 
 export default function BookingForm({
+  settings,
   services,
   times,
 }: {
+  settings: Settings;
   services: string[];
   times: string[];
 }) {
@@ -72,11 +75,11 @@ export default function BookingForm({
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn-lime btn-lime-hover">
+            <a href={waFor(settings)} target="_blank" rel="noopener noreferrer" className="btn-lime btn-lime-hover">
               <WhatsAppIcon className="h-5 w-5" /> WhatsApp us
             </a>
-            <a href={telUrl()} className="btn-ghost btn-lime-hover text-pearl hover:bg-teal-700">
-              <PhoneIcon className="h-5 w-5" /> {siteConfig.phoneNumber}
+            <a href={telFor(settings)} className="btn-ghost btn-lime-hover text-pearl hover:bg-teal-700">
+              <PhoneIcon className="h-5 w-5" /> {settings.phoneNumber}
             </a>
           </div>
 
@@ -84,12 +87,12 @@ export default function BookingForm({
             <div className="flex gap-3">
               <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-lime" />
               <dd>
-                {siteConfig.addressLine1}
+                {settings.addressLine1}
                 <br />
-                {siteConfig.addressLine2}
+                {settings.addressLine2}
                 <br />
                 <a
-                  href={siteConfig.mapsUrl}
+                  href={settings.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-lime underline decoration-lime/40 hover:decoration-lime"
@@ -101,16 +104,16 @@ export default function BookingForm({
             <div className="flex gap-3">
               <ClockIcon className="mt-0.5 h-5 w-5 shrink-0 text-lime" />
               <dd>
-                {siteConfig.hoursWeek}
+                {settings.hoursWeek}
                 <br />
-                {siteConfig.hoursSunday}
+                {settings.hoursSunday}
               </dd>
             </div>
             <div className="flex gap-3">
               <MailIcon className="mt-0.5 h-5 w-5 shrink-0 text-lime" />
               <dd>
-                <a href={`mailto:${siteConfig.email}`} className="hover:text-lime">
-                  {siteConfig.email}
+                <a href={`mailto:${settings.email}`} className="hover:text-lime">
+                  {settings.email}
                 </a>
               </dd>
             </div>

@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "next lint",
     "fetch-deps": "node scripts/fetch-deps-offline.mjs",
-    "seed": "node scripts/seed.mjs"
+    "seed": "node scripts/seed.mjs",
+    "seed:admin": "node scripts/seed-admin.mjs"
   },
   "dependencies": {
     "mongodb": "^7.8.0",

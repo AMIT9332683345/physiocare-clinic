@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { loadContent } from "@/lib/content";
-import { whatsappUrl } from "@/lib/site-config";
+import { waFor } from "@/lib/contact-links";
+import { getSettings } from "@/lib/settings";
 import Reveal from "@/components/Reveal";
 import SectionHead from "@/components/SectionHead";
 import { ArrowRightIcon, WhatsAppIcon } from "@/components/icons";
 
-export const revalidate = 300;
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export default async function BlogIndex() {
-  const { articles } = await loadContent();
+  const [{ articles }, settings] = await Promise.all([loadContent(), getSettings()]);
 
   return (
     <section className="bg-pearl py-16 lg:py-24">
@@ -54,7 +56,7 @@ export default async function BlogIndex() {
               </p>
             </div>
             <a
-              href={whatsappUrl()}
+              href={waFor(settings)}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-lime btn-lime-hover shrink-0"

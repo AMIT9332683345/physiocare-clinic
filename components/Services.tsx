@@ -1,10 +1,11 @@
 import type { Service } from "@/lib/content";
-import { whatsappUrl } from "@/lib/site-config";
+import { getSettings, waFor } from "@/lib/settings";
 import { ArrowRightIcon, ClockIcon, ServiceIcon } from "./icons";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
 
-export default function Services({ services }: { services: Service[] }) {
+export default async function Services({ services }: { services: Service[] }) {
+  const settings = await getSettings();
   return (
     <section id="services" className="bg-pearl py-20 lg:py-28">
       <div className="container-x">
@@ -39,7 +40,7 @@ export default function Services({ services }: { services: Service[] }) {
                     <ClockIcon className="h-4 w-4" /> {s.duration} min
                   </span>
                   <a
-                    href={whatsappUrl(
+                    href={waFor(settings, 
                       `Hi, I think I need ${s.title.toLowerCase()} physiotherapy. Can you share the next available slot?`
                     )}
                     target="_blank"

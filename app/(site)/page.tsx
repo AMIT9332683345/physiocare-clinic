@@ -8,16 +8,18 @@ import Process from "@/components/Process";
 import Services from "@/components/Services";
 import Testimonials from "@/components/Testimonials";
 import { loadContent } from "@/lib/content";
+import { getSettings } from "@/lib/settings";
 
 const TIME_SLOTS = [
   "08:00", "09:00", "10:00", "11:00", "12:00",
   "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
 ];
 
-export const revalidate = 300;
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const content = await loadContent();
+  const [content, settings] = await Promise.all([loadContent(), getSettings()]);
 
   return (
     <>
@@ -29,7 +31,11 @@ export default async function Home() {
       <Testimonials items={content.testimonials} />
       <Faqs faqs={content.faqs} />
       <Blog articles={content.articles} />
-      <BookingForm services={content.services.map((s) => s.title)} times={TIME_SLOTS} />
+      <BookingForm
+        settings={settings}
+        services={content.services.map((s) => s.title)}
+        times={TIME_SLOTS}
+      />
     </>
   );
 }

@@ -1,12 +1,13 @@
 import type { Package } from "@/lib/content";
-import { siteConfig, whatsappUrl } from "@/lib/site-config";
+import { getSettings, waFor } from "@/lib/settings";
 import { CheckIcon, WhatsAppIcon } from "./icons";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
 
 const inr = (v: number) => `₹${v.toLocaleString("en-IN")}`;
 
-export default function Pricing({ packages }: { packages: Package[] }) {
+export default async function Pricing({ packages }: { packages: Package[] }) {
+  const settings = await getSettings();
   return (
     <section id="pricing" className="bg-pearl-dark/45 py-20 lg:py-28">
       <div className="container-x">
@@ -14,7 +15,7 @@ export default function Pricing({ packages }: { packages: Package[] }) {
           center
           eyebrow="Transparent pricing"
           title="Packages that cost less per session"
-          intro={`Demo pricing for ${siteConfig.clinicName}. Pay by UPI, card or cash at the clinic; unused package sessions can be rescheduled free up to 4 hours before a slot.`}
+          intro={`Demo pricing for ${settings.clinicName}. Pay by UPI, card or cash at the clinic; unused package sessions can be rescheduled free up to 4 hours before a slot.`}
         />
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -82,7 +83,7 @@ export default function Pricing({ packages }: { packages: Package[] }) {
                 </ul>
 
                 <a
-                  href={whatsappUrl(
+                  href={waFor(settings, 
                     `Hi, I would like to book the "${p.name}" package (${inr(p.price)}). Please share available slots.`
                   )}
                   target="_blank"

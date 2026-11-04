@@ -18,9 +18,11 @@ services:
         sync: false # paste your Atlas connection string in the Render dashboard
       - key: MONGODB_DBNAME
         value: physiocare
+      - key: ADMIN_SESSION_SECRET
+        sync: false # paste a 32-byte hex string — the admin login will not work without it
       - key: ADMIN_TOKEN
         sync: false # pick a private string for /api/inbox
       - key: SITE_URL
-        sync: false # e.g. https://yourdomain.com — used by sitemap.xml
+        sync: false # e.g. https://yourdomain.com — used by share previews and sitemap.xml
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"

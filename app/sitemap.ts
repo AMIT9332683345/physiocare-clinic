@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
 import { loadContent } from "@/lib/content";
+import { getSettings, publicUrl } from "@/lib/settings";
 
 export const revalidate = 3600;
 
-/** Set SITE_URL to your live domain (Vercel & Render env vars) for correct URLs. */
-const base = (process.env.SITE_URL || "https://your-domain.com").replace(/\/$/, "");
+/** The domain comes from /admin → Clinic info (SITE_URL env is the fallback). */
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { articles } = await loadContent();
+  const [{ articles }, settings] = await Promise.all([loadContent(), getSettings()]);
+  const base = publicUrl(settings).replace(/\/$/, "");
   const now = new Date();
 
   return [

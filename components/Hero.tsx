@@ -1,8 +1,9 @@
 import { ArrowRightIcon, WhatsAppIcon } from "./icons";
-import { siteConfig, telUrl, whatsappUrl } from "@/lib/site-config";
+import { getSettings, telFor, waFor } from "@/lib/settings";
 import Reveal from "./Reveal";
 
-export default function Hero() {
+export default async function Hero() {
+  const settings = await getSettings();
   return (
     <section id="top" className="relative overflow-hidden bg-teal-800 text-pearl">
       {/* decorative palette wash */}
@@ -20,20 +21,20 @@ export default function Hero() {
           <Reveal>
             <span className="eyebrow inline-flex items-center gap-2 rounded-full bg-teal-700/70 px-4 py-2 text-lime">
               <span className="h-2 w-2 rounded-full bg-lime" />
-              {siteConfig.hoursWeek}
+              {settings.hoursWeek}
             </span>
           </Reveal>
 
           <Reveal delay={80}>
             <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] sm:text-5xl lg:text-6xl">
-              {siteConfig.tagline}
+              {settings.tagline}
               <span className="block text-lime">with one-to-one physiotherapy</span>
             </h1>
           </Reveal>
 
           <Reveal delay={140}>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-pearl/80">
-              {siteConfig.clinicName} is a {siteConfig.ownerName}-led rehabilitation clinic for back
+              {settings.clinicName} is a {settings.ownerName}-led rehabilitation clinic for back
               and neck pain, sports injuries, post-surgical recovery and long-term mobility. Real
               assessment, hands-on treatment, and a home plan you can keep to.
             </p>
@@ -42,7 +43,7 @@ export default function Hero() {
           <Reveal delay={200}>
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <a
-                href={whatsappUrl()}
+                href={waFor(settings)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-lime btn-lime-hover"
@@ -50,8 +51,8 @@ export default function Hero() {
                 <WhatsAppIcon className="h-5 w-5" />
                 Book on WhatsApp
               </a>
-              <a href={telUrl()} className="btn-ghost btn-lime-hover text-pearl hover:bg-teal-700">
-                Call {siteConfig.phoneNumber}
+              <a href={telFor(settings)} className="btn-ghost btn-lime-hover text-pearl hover:bg-teal-700">
+                Call {settings.phoneNumber}
               </a>
               <a
                 href="#book"
@@ -105,7 +106,7 @@ export default function Hero() {
             </div>
             <div className="absolute -bottom-5 -left-5 hidden rounded-2xl bg-pearl px-5 py-4 shadow-lift sm:block">
               <p className="font-display text-sm font-bold text-teal-800">
-                {siteConfig.credentials}
+                {settings.credentials}
               </p>
               <p className="text-xs text-teal-600">Treatment led by the senior physio, every time</p>
             </div>

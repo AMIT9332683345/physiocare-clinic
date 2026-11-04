@@ -69,3 +69,14 @@ export async function writeDoc(collection: string, doc: Record<string, unknown>)
   const db = await getDb();
   return db.collection(collection).insertOne(doc);
 }
+
+/** Direct handles for the admin panel (writes must not fail quietly). */
+export async function collection(name: string) {
+  const db = await getDb();
+  return db.collection(name);
+}
+
+export async function dbName(): Promise<string> {
+  const db = await getDb();
+  return db.databaseName;
+}
