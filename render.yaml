@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: physiocare-clinic
+    runtime: node
+    region: oregon
+    plan: free
+    # Leave `repo` and `branch` out so Render uses the repository you connect
+    # in the dashboard — this file then works whether the site is at the repo
+    # root or inside a physio-site/ folder.
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: npm run start -- -p $PORT
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: MONGODB_URI
+        sync: false # paste your Atlas connection string in the Render dashboard
+      - key: MONGODB_DBNAME
+        value: physiocare
+      - key: ADMIN_TOKEN
+        sync: false # pick a private string for /api/inbox
+      - key: SITE_URL
+        sync: false # e.g. https://yourdomain.com — used by sitemap.xml
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"

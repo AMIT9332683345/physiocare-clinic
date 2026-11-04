@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+build/
+
+# Local secrets — never commit these
+.env
+.env.local
+.env*.local
+uri.txt
+
+# Build / tool noise
+.turbo/
+next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+npm-debug.log*
