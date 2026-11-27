@@ -27,11 +27,6 @@ WhatsApp, iMessage, Facebook, X and LinkedIn all read Open Graph tags:
 Test a preview at https://opengraph.xyz or by sending the link to yourself on WhatsApp.
 Apps cache aggressively — re-share from a different chat or wait a few minutes.
 
-## 3. Changing name / numbers without the panel
-
-The code defaults still live in **one file**: [`lib/site-config.ts`](lib/site-config.ts).
-It is the fallback when MongoDB is unreachable and the seed source for the settings doc.
-Values saved in `/admin/clinic` take precedence over it.
 
 
 ## 9. Where submissions go
