@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { telFor, waFor } from "@/lib/contact-links";
-import { monogram } from "@/lib/site-config";
 import type { Settings } from "@/lib/settings";
 import { CloseIcon, MenuIcon, PhoneIcon, WhatsAppIcon } from "./icons";
 import InstallButton from "./InstallButton";
+import Image from "next/image";
 
 const links = [
   { href: "#services", label: "Services" },
@@ -37,9 +37,14 @@ export default function Header({ settings }: { settings: Settings }) {
     >
       <div className="container-x flex h-20 items-center justify-between gap-4">
         <a href="#top" className="flex items-center gap-3 text-pearl">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-lime font-display text-lg font-extrabold text-teal-800">
-            {monogram(settings.clinicName)}
-          </span>
+          <Image
+            src="/images/logo/logo.png"
+            alt={`${settings.clinicName} logo`}
+            width={56}
+            height={56}
+            priority
+            className="h-12 w-12 rounded-xl object-contain"
+          />
           <span className="leading-tight">
             <span className="block font-display text-lg font-bold">{settings.clinicName}</span>
             <span className="block text-[11px] uppercase tracking-[0.18em] text-teal-300">
