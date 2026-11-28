@@ -81,15 +81,18 @@ export default function Header({ settings }: { settings: Settings }) {
           </a>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="grid h-11 w-11 place-items-center rounded-xl border border-pearl/25 text-pearl lg:hidden"
-          aria-label="Toggle menu"
-          aria-expanded={open}
-        >
-          {open ? <CloseIcon /> : <MenuIcon />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <InstallButton className="rounded-full bg-lime px-4 py-2.5 text-sm font-bold text-teal-900 shadow-card transition hover:bg-lime-dark" />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="grid h-11 w-11 place-items-center rounded-xl border border-pearl/25 text-pearl lg:hidden"
+            aria-label="Toggle menu"
+            aria-expanded={open}
+          >
+            {open ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -118,7 +121,6 @@ export default function Header({ settings }: { settings: Settings }) {
                 <WhatsAppIcon className="h-5 w-5" /> Chat
               </a>
             </div>
-            <InstallButton className="btn-ghost mt-3 w-full border-pearl/40 text-pearl" />
           </div>
         </div>
       )}
