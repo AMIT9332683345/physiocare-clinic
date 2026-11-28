@@ -1,12 +1,23 @@
 import type { Viewport } from "next";
 import "./globals.css";
 import { siteConfig } from "@/lib/site-config";
+import { getSettings } from "@/lib/settings";
 
 export const viewport: Viewport = {
   themeColor: siteConfig.colors.midnightTeal,
   width: "device-width",
   initialScale: 1,
 };
+
+export async function generateMetadata() {
+  const settings = await getSettings();
+  const logo = "/images/logo/logo.png";
+  return {
+    manifest: "/manifest.webmanifest",
+    appleWebApp: { capable: true, statusBarStyle: "default" as const, title: settings.clinicName },
+    icons: { icon: logo, apple: logo },
+  };
+}
 
 /**
  * Only the document shell lives here. The public site (with its header,

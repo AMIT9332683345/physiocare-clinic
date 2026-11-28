@@ -3,6 +3,7 @@ import FloatingActions from "@/components/FloatingActions";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { getSettings, publicUrl } from "@/lib/settings";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -91,6 +92,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Header settings={settings} />
+      <ServiceWorkerRegistration />
       <main>{children}</main>
       <Footer />
       <FloatingActions settings={settings} />

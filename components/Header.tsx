@@ -5,6 +5,7 @@ import { telFor, waFor } from "@/lib/contact-links";
 import { monogram } from "@/lib/site-config";
 import type { Settings } from "@/lib/settings";
 import { CloseIcon, MenuIcon, PhoneIcon, WhatsAppIcon } from "./icons";
+import InstallButton from "./InstallButton";
 
 const links = [
   { href: "#services", label: "Services" },
@@ -60,6 +61,7 @@ export default function Header({ settings }: { settings: Settings }) {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
+          <InstallButton className="btn-ghost text-pearl hover:bg-teal-700 text-sm" />
           <a
             href={telFor(settings)}
             className="btn-ghost text-pearl hover:bg-teal-700"
@@ -116,6 +118,7 @@ export default function Header({ settings }: { settings: Settings }) {
                 <WhatsAppIcon className="h-5 w-5" /> Chat
               </a>
             </div>
+            <InstallButton className="btn-ghost mt-3 w-full border-pearl/40 text-pearl" />
           </div>
         </div>
       )}
